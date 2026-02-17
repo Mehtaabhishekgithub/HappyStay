@@ -5,30 +5,35 @@ import { FaEyeSlash } from "react-icons/fa";
 import { useNavigate } from 'react-router-dom';
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { useContext } from 'react';
-import { authDataContext } from '../Context/AuthContext';
 import axios from 'axios';
+import { userDataContext } from '../Context/UserContext';
+import { authDataContext } from '../Context/AuthContext';
 
 
 
 function Login() {
 const [show, setShow] = useState(false)
 let {serverUrl} = useContext(authDataContext)
+ let{userData,setUserData} =useContext(userDataContext)
 let navigate= useNavigate()
 const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+ 
 
 const handleLogin = async (e) => {
-  try {
+   try {
     e.preventDefault()
-    let result = await axios.post(serverUrl + "/api/auth/login",{
+   let result = await axios.post( serverUrl + "/api/auth/login",{
         email,
         password
     },{withCredentials:true}) 
+    setUserData(result.data)
+    navigate("/")
     console.log(result)
   } catch (error) {
-    console.log(error)
+    console.log(error.response?.data)
   }
-  }
+}
 
   return (
     <div className='w-screen min-h-screen flex flex-col items-center justify-center gap-4 relative'>
