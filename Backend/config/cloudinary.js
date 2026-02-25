@@ -19,7 +19,8 @@ try {
 
   return uploadResult.secure_url
 
-} catch (error) {
+} 
+catch (error) {
   fs.unlinkSync(filepath)
   console.log(error)
 }

@@ -1,14 +1,48 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { FaArrowLeftLong } from 'react-icons/fa6'
 import { useNavigate } from 'react-router-dom'
+import { listingDataContext } from '../Context/ListingContext'
 
 function ListingPage1() {
   let navigate = useNavigate()
+  let  {title,setTitle,
+  description,setDescription,
+  frontEndImage1,setFrontEndImage1,
+  frontEndImage2,setFrontEndImage2,
+  frontEndImage3,setFrontEndImage3,
+  backEndImage1,setBackEndImage1,
+  backEndImage2,setBackEndImage2,
+  backEndImage3,setBackEndImage3,
+  rent,setRent,
+  city,setCity,
+  landmark,setLandmark,
+  category,setCategory} = useContext(listingDataContext)
+  
+  const handleImage1 = (e)=>{
+     let file = e.target.files[0]
+     setBackEndImage1(file)
+     setFrontEndImage1(URL.createObjectURL(file))
+  }
+  const handleImage2 = (e)=>{
+     let file = e.target.files[0]
+     setBackEndImage2(file)
+     setFrontEndImage2(URL.createObjectURL(file))
+  }
+  const handleImage3 = (e)=>{
+     let file =e.target.files[0]
+     setBackEndImage3(file)
+     setFrontEndImage3(URL.createObjectURL(file))
+  }
   return (
     <div className='w-[100%] h-[100vh] bg-white
      flex items-center justify-center relative overflow-auto'>
 
-      <form  className='max-w-[900px] w-[90%] h-[550px] flex flex-col
+      <form
+       onSubmit={(e)=>{e.preventDefault()
+        navigate("/listingpage2")
+       }}
+       
+      className='max-w-[900px] w-[90%] h-[550px] flex flex-col
       overflow-auto items-center justify-start md:items-start gap-[10px] mt-[50px] '>
         
         <div 
@@ -30,6 +64,8 @@ function ListingPage1() {
         <div className='w-full flex flex-col gap-2'>
       <label htmlFor='title' className='text-[20px] font-semibold'>Title</label>
       <input
+      value={title}
+      onChange={(e)=>setTitle(e.target.value)}
       id='title'
       type='text'
        placeholder='Enter title'
@@ -39,6 +75,8 @@ function ListingPage1() {
     <div className='w-full flex flex-col gap-2'>
       <label htmlFor='des' className='text-[20px] font-semibold'>Description</label>
       <textarea
+      value={description}
+      onChange={(e)=>setDescription(e.target.value)}
       id='des'
       type='text'
        className='w-full h-[80px] border-2  border-gray-600 rounded-lg px-4' required >
@@ -50,9 +88,9 @@ function ListingPage1() {
     Image 1
   </label>
   <input
+  onChange={handleImage1}
     id='img1'
     type='file'
-    accept='image/*'
     required
     className='w-full border-2 border-gray-600 rounded-lg 
     p-1 text-sm text-gray-700 file:mr-4
@@ -68,9 +106,9 @@ function ListingPage1() {
     Image 2
   </label>
   <input
+  onChange={handleImage2}
     id='img2'
     type='file'
-    accept='image/*'
     required
     className='w-full border-2 border-gray-600 rounded-lg 
     p-1 text-sm text-gray-700 file:mr-4
@@ -86,9 +124,9 @@ function ListingPage1() {
     Image 3
   </label>
   <input
+  onChange={handleImage3}
     id='img3'
     type='file'
-    accept='image/*'
     required
     className='w-full border-2 border-gray-600 rounded-lg 
     p-1 text-sm text-gray-700 file:mr-4
@@ -102,8 +140,10 @@ function ListingPage1() {
  <div className='w-full flex flex-col gap-2'>
       <label htmlFor='rent' className='text-[20px] font-semibold'>Rent</label>
       <input
+      value={rent}
+      onChange={(e)=>setRent(e.target.value)}
       id='rent'
-      type='text'
+      type='number'
        placeholder='Enter rent'
        className='w-full h-[40px] border-2 border-gray-600 rounded-lg px-4' required />
     </div>
@@ -111,6 +151,8 @@ function ListingPage1() {
  <div className='w-full flex flex-col gap-2'>
       <label htmlFor='city' className='text-[20px] font-semibold'>City</label>
       <input
+      value={city}
+      onChange={(e)=>setCity(e.target.value)}
       id='city'
       type='text'
        placeholder='Enter city'
@@ -120,6 +162,8 @@ function ListingPage1() {
  <div className='w-full flex flex-col gap-2'>
       <label htmlFor='landmark' className='text-[20px] font-semibold'>Landmark</label>
       <input
+      value={landmark}
+      onChange={(e)=>setLandmark(e.target.value)}
       id='landmark'
       type='text'
        placeholder='Enter landmark'

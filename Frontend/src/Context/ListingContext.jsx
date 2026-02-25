@@ -1,7 +1,8 @@
 import axios from 'axios'
-import React, { createContext, useState } from 'react'
+import React, { createContext, useEffect, useState } from 'react'
 import { useContext } from 'react'
 import { authDataContext } from './AuthContext'
+import { useNavigate } from 'react-router-dom'
 
 export const listingDataContext = createContext()
 
@@ -20,9 +21,13 @@ function ListingContext({children}) {
    let [city, setCity] = useState("")
    let [landmark, setLandmark] = useState("")
    let [category, setCategory] = useState("")
-
+   let navigate = useNavigate()
+   const [adding, setAdding] = useState(false)
+const [listingData, setListingData] = useState([])
+ const [newListData, setNewListData] = useState([])
    
     const handleAddListing = async ()=>{
+      setAdding(true)
       try {
         let formData = new FormData()
    formData.append("title",title)
@@ -34,18 +39,45 @@ function ListingContext({children}) {
    formData.append("city",city)
    formData.append("landmark",landmark)
    formData.append("category",category)
-           let result = await axios.post(serverUrl +"/api/listing/add",formData,{withCredentials:true})
-           console.log(result)
+      let result = await axios.post(serverUrl + "/api/listing/add" , formData,{withCredentials:true})
+      console.log(result)
+      setAdding(false)
+       navigate("/")
+      setTitle("")
+      setDescription("")
+      setFrontEndImage1(null)
+      setFrontEndImage2(null)
+      setFrontEndImage3(null)
+      setBackEndImage1(null)
+      setBackEndImage2(null)
+      setBackEndImage3(null)
+      setRent("")
+      setCity("")
+      setLandmark("")
+      setCategory("")
+
+
       } catch (error) {
+        setAdding(false)
         console.log(error)
       }
     }
+   
+ const getListing = async ()=>{
+  try {
+    let result = await axios.get(serverUrl + "/api/listing/get",{withCredentials:true})
+   setListingData(result.data)
+   setNewListData(result.data)
+  } catch (error) {
+    console.log(error)
+  }
+ }
 
+ useEffect(()=>{
+getListing()
+ },[adding])
 
-
-
-
-  let value ={
+ let value ={
   title,setTitle,
   description,setDescription,
   frontEndImage1,setFrontEndImage1,
@@ -58,9 +90,11 @@ function ListingContext({children}) {
   city,setCity,
   landmark,setLandmark,
   category,setCategory,
-  handleAddListing
-  
-
+  handleAddListing,
+  adding,setAdding,
+  newListData, setNewListData,
+  setListingData,listingData,
+  getListing
   }
   return (
     <div>

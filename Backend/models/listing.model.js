@@ -1,4 +1,5 @@
 import mongoose from "mongoose"
+import User from "./user.model.js"
 
 const listingSchema = new mongoose.Schema({
   title:{
@@ -34,7 +35,7 @@ const listingSchema = new mongoose.Schema({
     type:String,
     required:true
   },
-  landMark:{
+  landmark:{
     type:String,
     required:true
   },

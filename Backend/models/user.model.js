@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import Listing from "./listing.model.js";
 
 
 const userSchema = new mongoose.Schema({

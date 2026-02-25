@@ -19,9 +19,11 @@ function SignUp() {
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  let {loading,setLoading} = useContext(authDataContext)
    let{userData,setUserData} =useContext(userDataContext)
 
   const handleSignUp = async (e) => {
+    setLoading(true)
   try {
     e.preventDefault()
     let result = await axios.post(serverUrl + "/api/auth/signup",{
@@ -29,10 +31,12 @@ function SignUp() {
         email,
         password
     },{withCredentials:true}) 
+    setLoading(false)
     setUserData(result.data)
     navigate("/")
     console.log(result)
   } catch (error) {
+    setLoading(false)
     console.log(error)
   }
   }
@@ -99,10 +103,12 @@ function SignUp() {
        
 
 
-    <button className='w-full py-2 bg-blue-500 text-white text-[18px] rounded-lg font-bold'>
-      SignUp
-      
+    <button
+    disabled={loading}
+     className='w-full py-2 bg-blue-500 text-white text-[18px] rounded-lg font-bold'>
+      {loading ?"Loading...":"SignUp"}
     </button>
+    
       <div onClick={()=>navigate("/login")} >
     <p>Already Have an Account? <span className='text-blue-600 text-[18px] cursor-pointer'>Login</span></p>
      </div>

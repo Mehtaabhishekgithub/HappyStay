@@ -18,9 +18,12 @@ let {serverUrl} = useContext(authDataContext)
 let navigate= useNavigate()
 const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+let {loading,setLoading} = useContext(authDataContext)
+  
  
 
 const handleLogin = async (e) => {
+  setLoading(true)
    try {
     e.preventDefault()
    let result = await axios.post( serverUrl + "/api/auth/login",{
@@ -29,8 +32,10 @@ const handleLogin = async (e) => {
     },{withCredentials:true}) 
     setUserData(result.data)
     navigate("/")
+    setLoading(false)
     console.log(result)
   } catch (error) {
+    setLoading(false)
     console.log(error.response?.data)
   }
 }
@@ -93,11 +98,12 @@ const handleLogin = async (e) => {
 
 
     <button
+    disabled={loading}
      className='w-full py-2 bg-blue-500 text-white text-[18px] rounded-lg font-bold'>
-      Login
+       {loading ?"Loading...":"Login"}
     </button>
      <div onClick={()=>navigate("/signup")} >
-    <p>Want to Create an Account? <span className='text-blue-600 text-[18px] cursor-pointer'>Signup</span></p>
+    <p>Want to Create an Account? <span className='text-blue-600 text-[18px] cursor-pointer'>SignUp</span></p>
      </div>
 
   </form>
