@@ -9,7 +9,7 @@ function Home() {
     <div>
       <NavBar/>
       <div className='w-full h-[77vh] flex items-center justify-center
-      gap-[25px] flex-wrap mt-[250px] md:mt-[188px]'>
+      gap-[25px] flex-wrap mt-[300px] md:mt-[300px]'>
         {newListData.map((list)=>(
           <Card title={list.title}
           landmark ={list.landmark}

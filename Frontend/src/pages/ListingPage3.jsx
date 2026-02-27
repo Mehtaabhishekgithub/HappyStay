@@ -85,24 +85,24 @@ function ListingPage3() {
       </div>
 
       {/* Description */}
-      <div className="w-[95%] md:w-[80%] text-[20px] md:text-[30px] text-gray-600 leading-relaxed">
+      <div className="w-[95%] md:w-[80%] text-[20px] md:text-[20px] text-gray-600 leading-relaxed">
         {description}
       </div>
 
       {/* Price */}
-      <div className="w-[95%] md:w-[80%] text-[22px] font-bold md:text-xl text-blue-600">
-        ₹{rent}/day
+      <div className="w-[95%] md:w-[80%] text-[22px] font-semibold md:text-[30px] text-blue-600">
+        Rs.{rent}/day
       </div>
        
        <button
        onClick={handleAddListing}
        disabled={adding}
-  className="w-[95%] md:w-auto px-6 py-3 
+  className="w-[95%] md:w-[10%] px-6 py-3 
   bg-blue-500 hover:bg-blue-600
   text-white font-semibold
   rounded-xl shadow-md
   transition-all duration-200
-  active:scale-95"
+  active:scale-95 " 
 >
   {adding?"Adding....":"Add Listing"}
 </button>

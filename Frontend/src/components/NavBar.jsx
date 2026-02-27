@@ -117,7 +117,9 @@ const NavBar = () => {
              onClick={()=>{navigate("/listingpage1");setShowpopup(false)}}
             className="w-[100%] px-[15px] py-[10px]
             hover:bg-[#f4f3f3] cursor-pointer">List Your Home</li>
-           <li className="w-[100%] px-[15px] py-[10px]
+           <li
+            onClick={()=>{navigate("/mylisting");setShowpopup(false)}}
+            className="w-[100%] px-[15px] py-[10px]
             hover:bg-[#f4f3f3] cursor-pointer">My Listing</li>
            <li className="w-[100%] px-[15px] py-[10px]
             hover:bg-[#f4f3f3] cursor-pointer">Check Booking</li>

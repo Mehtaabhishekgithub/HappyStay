@@ -1,8 +1,26 @@
-import React from 'react'
+import React, { useContext } from 'react'
+import { userDataContext } from '../Context/UserContext'
+import { listingDataContext } from '../Context/ListingContext'
+import { useNavigate } from 'react-router-dom'
+
 
 function Card({title,landmark,image1,image2,image3,rent,city,id}) {
+  let {userData}=useContext(userDataContext)
+  let {handleViewCard} = useContext(listingDataContext)
+  let navigate = useNavigate()
+  
+  const handleClick = async ()=>{
+   if(userData){
+    handleViewCard(id)
+   }
+   else{
+   navigate("/login")
+   }
+  }
   return (
-    <div className='w-[330px] max-w-[85%] h-[460px] flex items-start 
+    <div 
+    onClick={handleClick}
+    className='w-[330px] max-w-[85%] h-[460px] flex items-start 
     justify-start flex-col rounded-lg cursor-pointer '>
      <div className='w-[100%] h-[67%] bg-[#2e2e2d]
      rounded-lg overflow-auto flex'>
