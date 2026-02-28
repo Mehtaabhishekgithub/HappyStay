@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { FaArrowLeftLong } from 'react-icons/fa6'
 import { useNavigate } from 'react-router-dom'
 import { listingDataContext } from '../Context/ListingContext'
@@ -13,6 +13,7 @@ function ViewCard() {
   let {cardDetails}=useContext(listingDataContext)
   let {userData,setUserData}= useContext(userDataContext)
   const [updatePopup, setUpdatePopup] = useState(false)
+const [bookingPopup, setBookingPopup] = useState(false)
   const [title, setTitle] = useState(cardDetails.title)
 const [description, setDescription] = useState(cardDetails.description)
    let [backEndImage1,setBackEndImage1]=useState(null)
@@ -23,6 +24,8 @@ const [description, setDescription] = useState(cardDetails.description)
    let [landmark, setLandmark] = useState(cardDetails.landmark)
    let {updating,setUpdating}=useContext(listingDataContext)
    let{deleting,setDeleting}= useContext(listingDataContext)
+   const [minDate, setMinDate] = useState("")
+
 
 
     const handleImage1 = (e)=>{
@@ -85,12 +88,18 @@ const handleUpdateListing = async ()=>{
       setCity("")
       setLandmark("")
 
-
-      } catch (error) {
-         setUpdating(false)
-        console.log(error)
-        }
+} catch (error) {
+  setUpdating(false)
+ console.log(error)
+ }
 }
+
+useEffect(() => {
+  let today = new Date().toISOString().split('T')[0]
+  setMinDate(today)
+}, [])
+
+
   return (
   <div>
       <div className="w-full min-h-screen bg-white flex flex-col
@@ -173,6 +182,7 @@ const handleUpdateListing = async ()=>{
       > Edit Listing
       </button>}
      {cardDetails.host != userData._id && <button
+      onClick={()=>setBookingPopup(prev => !prev)}
         className="w-[100%] md:w-auto px-6 py-3 
         bg-blue-500 hover:bg-blue-600
         text-white font-semibold
@@ -334,6 +344,81 @@ bg-[#000000a9] z-[100] backdrop-blur-sm'>
       </div>
 
     </form>
+
+</div>}
+
+{bookingPopup && <div className='fixed inset-0 flex 
+items-center justify-center flex-col gap-[30px] bg-white/90
+z-[100] p-[20px] backdrop-blur-sm md:flex-row md:gap-[100px]'>
+
+<MdCancel  onClick={() => setBookingPopup(false)}
+className="w-[30px] h-[30px] bg-[cyan] cursor-pointer absolute top-[6%]
+left-[25px] rounded-[50%] flex items-center justify-center " />
+
+<form
+  className="max-w-[450px] w-[92%] sm:w-[90%]
+  bg-slate-200 p-4 sm:p-6 rounded-lg flex
+  flex-col gap-4 border border-[#dedddd] shadow-sm"
+>
+  {/* Heading */}
+  <h1
+    className="w-full text-center py-2 text-[22px] sm:text-[25px]
+    border-b border-[#a3a3a3] font-semibold"
+  >
+    Confirm & Book
+  </h1>
+  <h3 className='font-semibold'>Your Trip -</h3>
+  {/* Check In */}
+  <div className="w-full flex flex-col gap-1">
+    <label
+      htmlFor="checkIn"
+      className="text-[15px] sm:text-[17px] font-semibold text-gray-700"
+    >
+      Check In
+    </label>
+    <input
+      id="checkIn"
+      type="date"
+      min={minDate}
+      className="w-full h-[42px] text-[15px] sm:text-[16px]
+      border border-gray-300 rounded-lg
+      bg-white px-3
+      focus:border-blue-500 focus:outline-none"
+      required
+    />
+  </div>
+
+  {/* Check Out */}
+  <div className="w-full flex flex-col gap-1">
+    <label
+      htmlFor="checkOut"
+      className="text-[15px] sm:text-[17px] font-semibold text-gray-700"
+    >
+      Check Out
+    </label>
+    <input
+      id="checkOut"
+      type="date"
+      min={minDate}
+      className="w-full h-[42px] text-[15px] sm:text-[16px]
+      border border-gray-300 rounded-lg
+      bg-white px-3
+      focus:border-blue-500 focus:outline-none"
+      required
+    />
+  </div>
+
+  {/* Button */}
+  <button
+    type="submit"
+    className="w-full h-[46px] mt-2 rounded-lg
+    bg-blue-500 hover:bg-blue-600
+    text-white font-semibold text-[15px] sm:text-[16px]
+    transition active:scale-[0.98]"
+  >
+    Book Now
+  </button>
+</form>
 
 </div>}
 

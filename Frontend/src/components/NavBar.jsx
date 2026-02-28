@@ -56,12 +56,12 @@ const NavBar = () => {
     <div className="fixed top-0 bg-white">
       {/* NavBar */}
       <div className=" w-[100vw] min-h-[80px] border-b-[1px] border-[#dcdcdc] 
-      px-[20px] flex items-center justify-between md:px-[40px] ">
+      px-[20px] flex items-center justify-between md:px-[40px] relative ">
         <div>
           <img src={logo} alt="" className="w-[130px]" />
         </div>
 
-        <div className="w-[35%] relative hidden md:block">
+        <div className="w-[30%] absolute  left-1/2 -translate-x-1/2  hidden md:block ">
           <input
             placeholder="Any Where | Any Location | Any City"
             type="text"
@@ -70,7 +70,7 @@ const NavBar = () => {
           rounded-[30px] text-[18px]
           border-[1px] border-[#bdbaba]"
           />
-          <button className="absolute p-[10px] rounded-[50px] right-[1%] bg-blue-500 top-[5px]">
+          <button className="absolute p-[10px] rounded-[50px] right-[1%]  bg-cyan-400 top-[5px]">
             <IoSearchSharp className="w-[20px] h-[20px] text-white" />
           </button>
         </div>
@@ -78,8 +78,8 @@ const NavBar = () => {
         <div className="flex items-center justify-center gap-[10px] relative">
           <span
           onClick={()=>navigate("/listingpage1")}
-            className="text-[18px] font-bold text-blue-400 cursor-pointer rounded-[50px]
-          px-[8px] py-[5px] hidden md:block
+            className="text-[18px] bg-cyan-400 font-semibold text-gray-600 cursor-pointer rounded-[50px]
+          p-3 hidden md:block hover:scale-90 
            hover:bg-slate-200"
           >List Your Home
           </span>

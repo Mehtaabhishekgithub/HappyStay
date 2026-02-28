@@ -27,8 +27,8 @@ function ListingPage3() {
 
     
   return (
-    <div className="w-full min-h-screen bg-white flex flex-col
-     items-center justify-start gap-4 overflow-auto relative  pt-20 md:pt-10 pb-1">
+    <div className="w-full min-h-screen bg-white flex flex-col 
+     items-center justify-start gap-4 overflow-y-auto relative  pt-20 md:pt-10 pb-1">
 
       {/* Back Button */}
       <div
@@ -97,7 +97,7 @@ function ListingPage3() {
        <button
        onClick={handleAddListing}
        disabled={adding}
-  className="w-[95%] md:w-[10%] px-6 py-3 
+  className="w-[95%] md:w-[200px] px-6 py-3 
   bg-blue-500 hover:bg-blue-600
   text-white font-semibold
   rounded-xl shadow-md

@@ -42,7 +42,7 @@ function ListingPage1() {
         navigate("/listingpage2")
        }}
        
-      className='max-w-[900px] w-[90%] h-[550px] flex flex-col
+      className='max-w-[900px] w-[90%] h-[550px] flex flex-col no-scrollbar
       overflow-auto items-center justify-start md:items-start gap-[10px] mt-[50px] '>
         
         <div 
