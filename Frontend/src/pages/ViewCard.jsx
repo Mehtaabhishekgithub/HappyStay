@@ -1,11 +1,12 @@
-import React, { useContext, useEffect, useState } from 'react'
-import { FaArrowLeftLong } from 'react-icons/fa6'
+import React, { useContext, useEffect, useEffectEvent, useState } from 'react'
+import { FaArrowLeftLong, FaStar } from 'react-icons/fa6'
 import { useNavigate } from 'react-router-dom'
 import { listingDataContext } from '../Context/ListingContext'
 import { userDataContext } from '../Context/UserContext'
 import { MdCancel } from "react-icons/md";
 import axios from 'axios'
 import { authDataContext } from '../Context/AuthContext'
+import { bookingDataContext } from '../Context/BookingContext'
 
 function ViewCard() {
   let navigate = useNavigate()
@@ -25,10 +26,30 @@ const [description, setDescription] = useState(cardDetails.description)
    let {updating,setUpdating}=useContext(listingDataContext)
    let{deleting,setDeleting}= useContext(listingDataContext)
    const [minDate, setMinDate] = useState("")
+  let {checkIn,setcheckIn,
+    checkOut,setcheckOut,
+    total,setTotal,handleBooking,
+    night,setNight} = useContext(bookingDataContext) 
 
+    useEffect(() => {
+      if(checkIn && checkOut){
+        let inDate = new Date(checkIn)
+        let OutDate = new Date(checkOut)
+        let n = (OutDate-inDate)/(24*60*60*1000)
+        setNight(n)
+        let happyStayCharge = (cardDetails.rent*(7/100))
+        let tax = (cardDetails.rent*(7/100))
+        if(n>0){
+          setTotal((cardDetails.rent*n) + happyStayCharge + tax)
+        }
+        else{
+          setTotal(0)
+        }
+       }
+    }, [checkIn,checkOut,cardDetails.rent,total])
+    
 
-
-    const handleImage1 = (e)=>{
+   const handleImage1 = (e)=>{
      let file = e.target.files[0]
      setBackEndImage1(file)
   }
@@ -347,18 +368,28 @@ bg-[#000000a9] z-[100] backdrop-blur-sm'>
 
 </div>}
 
-{bookingPopup && <div className='fixed inset-0 flex 
-items-center justify-center flex-col gap-[30px] bg-white/90
-z-[100] p-[20px] backdrop-blur-sm md:flex-row md:gap-[100px]'>
+{bookingPopup && <div className="fixed inset-0 flex
+items-start  md:items-center justify-center
+flex-col md:flex-row gap-6 md:gap-16
+bg-white/90 z-[100] p-4 sm:p-6
+backdrop-blur-sm overflow-auto  ">
 
-<MdCancel  onClick={() => setBookingPopup(false)}
-className="w-[30px] h-[30px] bg-[cyan] cursor-pointer absolute top-[6%]
-left-[25px] rounded-[50%] flex items-center justify-center " />
+<MdCancel 
+ onClick={() => setBookingPopup(false)}
+ className="absolute top-4 right-4 md:top-6 md:right-6
+  w-[34px] h-[34px] md:w-[40px] md:h-[40px]
+  bg-cyan-400 hover:bg-cyan-500
+  cursor-pointer rounded-full
+  flex items-center justify-center
+  shadow-md z-50" />
 
-<form
-  className="max-w-[450px] w-[92%] sm:w-[90%]
-  bg-slate-200 p-4 sm:p-6 rounded-lg flex
-  flex-col gap-4 border border-[#dedddd] shadow-sm"
+
+  <form
+  onSubmit={(e)=>{e.preventDefault()}}
+  className="w-full sm:w-[90%] md:w-[420px]
+  bg-gray-300 p-4 sm:p-6 rounded-lg flex
+  flex-col gap-4 justify-between border border-[#dedddd] shadow-sm
+  h-auto md:h-[400px] "
 >
   {/* Heading */}
   <h1
@@ -377,6 +408,8 @@ left-[25px] rounded-[50%] flex items-center justify-center " />
       Check In
     </label>
     <input
+    value={checkIn}
+    onChange={(e)=>setcheckIn(e.target.value)}
       id="checkIn"
       type="date"
       min={minDate}
@@ -397,6 +430,8 @@ left-[25px] rounded-[50%] flex items-center justify-center " />
       Check Out
     </label>
     <input
+     value={checkOut}
+    onChange={(e)=>setcheckOut(e.target.value)}
       id="checkOut"
       type="date"
       min={minDate}
@@ -410,6 +445,7 @@ left-[25px] rounded-[50%] flex items-center justify-center " />
 
   {/* Button */}
   <button
+  onClick={()=>{handleBooking(cardDetails._id)}}
     type="submit"
     className="w-full h-[46px] mt-2 rounded-lg
     bg-blue-500 hover:bg-blue-600
@@ -419,6 +455,72 @@ left-[25px] rounded-[50%] flex items-center justify-center " />
     Book Now
   </button>
 </form>
+
+<div
+  className="
+  w-full sm:w-[90%] md:w-[420px]
+  bg-gray-300 p-4 sm:p-6 rounded-lg flex
+  flex-col gap-4 border border-[#dedddd] shadow-sm
+  h-auto md:h-[400px] 
+  "
+>
+  {/* Property Preview */}
+  <div className="w-full flex gap-3 items-center ">
+
+    {/* Image */}
+    <div className="w-[90px] h-[90px] flex-shrink-0 rounded-lg overflow-hidden">
+      <img
+        className="w-full h-full object-cover"
+        src={cardDetails?.image1}
+        alt="listing"
+      />
+    </div>
+
+    {/* Text */}
+    <div className="flex-1 min-w-0">
+      <h1 className="text-[14px] sm:text-[15px] font-semibold truncate">
+        {`In ${cardDetails?.landmark?.toUpperCase()} , ${cardDetails?.city?.toUpperCase()}`}</h1>
+ <h1>{cardDetails.title.toUpperCase()}</h1>
+ <h1 className='flex items-center justify-start gap-[5px]'><FaStar color='cyan'/>{cardDetails.ratings}</h1>
+ </div>
+</div>
+
+<div className="w-full border border-gray-400
+rounded-lg p-4 flex flex-col gap-3 bg-white/60">
+
+  <h1 className="text-[18px] font-semibold">
+    Booking Price
+  </h1>
+
+  <div className="w-full flex justify-between text-sm sm:text-base">
+    <span className="font-medium">
+      {`Rs ${cardDetails.rent} x ${night} nights`}
+    </span>
+    <span>{cardDetails.rent * night || 0}</span>
+  </div>
+
+  <div className="w-full flex justify-between text-sm sm:text-base">
+    <span className="font-medium">Tax</span>
+    <span>{(cardDetails.rent * 7) / 100}</span>
+  </div>
+
+  <div className="w-full flex justify-between text-sm sm:text-base">
+    <span className="font-medium">HappyStay Charge</span>
+    <span>{(cardDetails.rent * 7) / 100}</span>
+  </div>
+
+  {/* divider */}
+  <div className="w-full h-[1px] bg-gray-400 my-1" />
+
+  <div className="w-full flex justify-between font-semibold text-[16px] sm:text-[18px]">
+    <span>Total</span>
+    <span>Rs {total}</span>
+  </div>
+
+</div>
+
+
+</div>
 
 </div>}
 

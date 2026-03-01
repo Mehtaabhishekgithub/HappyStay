@@ -53,7 +53,7 @@ const NavBar = () => {
 }
 
   return (
-    <div className="fixed top-0 bg-white">
+    <div className="fixed top-0 bg-white z-[20]">
       {/* NavBar */}
       <div className=" w-[100vw] min-h-[80px] border-b-[1px] border-[#dcdcdc] 
       px-[20px] flex items-center justify-between md:px-[40px] relative ">
@@ -121,8 +121,10 @@ const NavBar = () => {
             onClick={()=>{navigate("/mylisting");setShowpopup(false)}}
             className="w-[100%] px-[15px] py-[10px]
             hover:bg-[#f4f3f3] cursor-pointer">My Listing</li>
-           <li className="w-[100%] px-[15px] py-[10px]
-            hover:bg-[#f4f3f3] cursor-pointer">Check Booking</li>
+           <li
+            onClick={()=>{navigate("/mybooking");setShowpopup(false)}}
+            className="w-[100%] px-[15px] py-[10px]
+            hover:bg-[#f4f3f3] cursor-pointer">My Booking</li>
           </ul>
 
           </div>

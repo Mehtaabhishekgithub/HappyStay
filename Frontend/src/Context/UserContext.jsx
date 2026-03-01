@@ -22,7 +22,7 @@ function UserContext({children}) {
     },[])
 
   let value = {
-    userData,setUserData
+    userData,setUserData,getCurrentUser
   }
   return (
     <div>
