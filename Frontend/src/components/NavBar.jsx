@@ -19,14 +19,16 @@ import axios from "axios"
 import { authDataContext } from "../Context/AuthContext";
 import { userDataContext } from "../Context/UserContext";
 import { listingDataContext } from "../Context/ListingContext";
+import { useEffect } from "react";
 
 const NavBar = () => {
   let [showpopup,setShowpopup]=useState(false)
   let navigate = useNavigate()
   let {serverUrl} = useContext(authDataContext)
    let{userData,setUserData} = useContext(userDataContext)
-   let {listingData,setListingData,newListData,setNewListData}=useContext(listingDataContext)
+   let {listingData,setListingData,newListData,setNewListData, searchData,setSearchData,handleSearch,handleViewCard}=useContext(listingDataContext)
    const [cate, setCate] = useState("")
+   const [input, setInput] = useState("")
      
 
 
@@ -38,6 +40,15 @@ const NavBar = () => {
     } catch (error) {
       console.log(error)
     }
+  }
+  
+  const handleClick = async (id)=>{
+   if(userData){
+    handleViewCard(id)
+   }
+   else{
+   navigate("/login")
+   }
   }
 
   const handleCategory = (category)=>{
@@ -51,6 +62,10 @@ const NavBar = () => {
     )
   }
 }
+useEffect(() => {
+handleSearch(input)
+}, [input])
+
 
   return (
     <div className="fixed top-0 bg-white z-[20]">
@@ -63,6 +78,8 @@ const NavBar = () => {
 
         <div className="w-[30%] absolute  left-1/2 -translate-x-1/2  hidden md:block ">
           <input
+          value={input}
+          onChange={(e)=>setInput(e.target.value)}
             placeholder="Any Where | Any Location | Any City"
             type="text"
             className="w-[100%] px-[30px] py-[10px] 
@@ -131,6 +148,30 @@ const NavBar = () => {
           }
 
          </div> 
+
+       {input?.trim() && searchData?.length > 0 && (
+  <div
+    className="w-full flex flex-col gap-5 absolute top-[110%] left-1/2 
+    -translate-x-1/2 justify-start items-center z-50 px-2"
+  >
+    <div
+      className="max-w-[700px] w-full md:w-[600px] max-h-[320px] overflow-y-auto
+      flex flex-col bg-[#fefdfd] p-4 rounded-lg border border-[#a2a1a1]
+      shadow-lg cursor-pointer"
+    >
+      {searchData.map((search) => (
+        <div
+          key={search._id}
+          className="border-b last:border-none p-3 text-sm md:text-base
+          hover:bg-slate-100 rounded-md"
+          onClick={()=>handleClick(search._id)}
+        >
+          {search.title} in {search.landmark}, {search.city}
+        </div>
+      ))}
+    </div>
+  </div>
+)}
          
         
 </div>
@@ -140,6 +181,8 @@ const NavBar = () => {
   block md:hidden items-center justify-center">
     <div className="w-[80%] relative  ">
           <input
+          value={input}
+          onChange={(e)=>setInput(e.target.value)}
             placeholder="Book It"
             type="text"
             className="w-[100%] px-[30px] py-[10px] 

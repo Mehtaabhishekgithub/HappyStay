@@ -7,6 +7,7 @@ import { MdCancel } from "react-icons/md";
 import axios from 'axios'
 import { authDataContext } from '../Context/AuthContext'
 import { bookingDataContext } from '../Context/BookingContext'
+import { toast } from 'react-toastify'
 
 function ViewCard() {
   let navigate = useNavigate()
@@ -29,6 +30,7 @@ const [description, setDescription] = useState(cardDetails.description)
   let {checkIn,setcheckIn,
     checkOut,setcheckOut,
     total,setTotal,handleBooking,
+    booking,
     night,setNight} = useContext(bookingDataContext) 
 
     useEffect(() => {
@@ -75,10 +77,12 @@ const [description, setDescription] = useState(cardDetails.description)
     }))
 
     console.log(result.data)
+    toast.success("Listing Deleted succesfully")
         navigate("/")
     setDeleting(false)
     } catch (error) {
       console.log(error)
+  toast.error(error.response.data.message)
       setDeleting(false)
     }
   }
@@ -99,6 +103,7 @@ const handleUpdateListing = async ()=>{
       let result = await axios.post(serverUrl + `/api/listing/update/${cardDetails._id}` , formData,{withCredentials:true})
       console.log(result)
       setUpdating(false)
+      toast.success("Listing Updated succesfully")
        navigate("/")
       setTitle("")
       setDescription("")
@@ -112,6 +117,7 @@ const handleUpdateListing = async ()=>{
 } catch (error) {
   setUpdating(false)
  console.log(error)
+ toast.error(error.response.data.message)
  }
 }
 
@@ -445,6 +451,7 @@ backdrop-blur-sm overflow-auto  ">
 
   {/* Button */}
   <button
+  disabled={booking}
   onClick={()=>{handleBooking(cardDetails._id)}}
     type="submit"
     className="w-full h-[46px] mt-2 rounded-lg
@@ -452,7 +459,7 @@ backdrop-blur-sm overflow-auto  ">
     text-white font-semibold text-[15px] sm:text-[16px]
     transition active:scale-[0.98]"
   >
-    Book Now
+   {booking?"Booking...":"Book Now"}
   </button>
 </form>
 

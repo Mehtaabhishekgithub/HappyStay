@@ -2,7 +2,6 @@ import React, { useContext } from 'react'
 import NavBar from '../components/NavBar'
 import Card from '../components/Card'
 import { listingDataContext } from '../Context/ListingContext'
-import Footer from '../components/Footer'
 
 function Home() {
   let{listingData,setListingData,newListData}=useContext(listingDataContext)

@@ -7,6 +7,7 @@ import { FaArrowLeftLong } from "react-icons/fa6";
 import axios from "axios"
 import { userDataContext } from '../Context/UserContext';
 import { authDataContext } from '../Context/AuthContext';
+import { toast } from 'react-toastify';
 
 
 
@@ -34,11 +35,13 @@ function SignUp() {
     setLoading(false)
     setUserData(result.data)
     navigate("/")
+    toast.success("SignUp successfully")
     console.log(result)
   } catch (error) {
     setLoading(false)
     console.log(error)
-  }
+  toast.error("Something went wrong")
+}
   }
   return (
     <div className='w-screen min-h-screen flex flex-col items-center justify-center gap-4'>

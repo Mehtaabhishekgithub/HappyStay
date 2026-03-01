@@ -8,6 +8,7 @@ import { useContext } from 'react';
 import axios from 'axios';
 import { userDataContext } from '../Context/UserContext';
 import { authDataContext } from '../Context/AuthContext';
+import { toast } from 'react-toastify';
 
 
 
@@ -34,9 +35,11 @@ const handleLogin = async (e) => {
     navigate("/")
     setLoading(false)
     console.log(result)
-  } catch (error) {
+    toast.success("Login successfully")
+   } catch (error) {
     setLoading(false)
     console.log(error.response?.data)
+    toast.error(error.response.data.message)
   }
 }
 

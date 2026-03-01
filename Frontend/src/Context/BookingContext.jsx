@@ -3,6 +3,8 @@ import React, { createContext,  useContext, useState } from 'react'
 import { authDataContext } from './AuthContext'
 import { userDataContext } from './UserContext'
 import { listingDataContext } from './ListingContext'
+import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
 export const bookingDataContext = createContext()
 
@@ -15,9 +17,14 @@ let { getListing } = useContext(listingDataContext)
   const [total,setTotal] = useState(0)
   const [night,setNight] = useState(0)
   let {serverUrl} = useContext(authDataContext)
-  const [bookingdata, setBookingdata] = useState([])
+  const [bookingData, setBookingData] = useState([])
+  const [booking, setBooking] = useState(false)
+let navigate = useNavigate()
+
+
 
  const handleBooking = async (id)=>{
+  setBooking(true)
   try {
     let result = await axios.post( serverUrl + `/api/booking/create/${id}`,{
       checkIn,
@@ -25,12 +32,17 @@ let { getListing } = useContext(listingDataContext)
       totalRent:total },{withCredentials:true})
     await getCurrentUser()
     await getListing()
-    setBookingdata(result.data)
+    setBookingData(result.data)
     console.log(result.data)
+    toast.success("Booked succesfully")
+    setBooking(false)
+    navigate("/booked")
 
   } catch (error) {
     console.log(error)
-    setBookingdata(null)
+    toast.error(error.response.data.message)
+    setBookingData(null)
+    setBooking(false)
   }
  }
 
@@ -40,8 +52,10 @@ let { getListing } = useContext(listingDataContext)
     await getCurrentUser()
     await getListing()
     console.log(result.data)
+    toast.success("Booking Cancelled succesfully")
   } catch (error) {
     console.log(error)
+    toast.error(error.response.data.message)
   }
  }
 
@@ -50,8 +64,9 @@ let { getListing } = useContext(listingDataContext)
     checkOut,setcheckOut,
     total,setTotal,
     night,setNight,
-    bookingdata, setBookingdata,
-    handleBooking,cancelBooking
+    bookingData, setBookingData,
+    handleBooking,cancelBooking,
+    booking, setBooking
   }
 
   return (
